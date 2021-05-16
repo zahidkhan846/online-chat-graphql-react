@@ -5,11 +5,12 @@ const { sequelize } = require("./models");
 const typeDefs = require("./graphql/typeDefs");
 // The GraphQL resolvers
 const resolvers = require("./graphql/resolvers");
+const auth = require("./middlewares/auth");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: (ctx) => ctx,
+  context: (ctx) => auth(ctx),
 });
 
 server.listen().then(({ url }) => {

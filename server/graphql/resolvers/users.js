@@ -1,25 +1,16 @@
-const { User } = require("../models");
+const { User } = require("../../models");
 const { UserInputError, AuthenticationError } = require("apollo-server");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const env = require("../config/env");
+const env = require("../../config/env");
 const { Op } = require("sequelize");
 
 module.exports = {
   Query: {
-    getUsers: async (parant, args, context) => {
-      let user;
-
+    getUsers: async (parant, args, { user }) => {
+      console.log(user);
       try {
-        if (context.req && context.req.headers.authorization) {
-          const token = context.req.headers.authorization.split("Bearer ")[1];
-          jwt.verify(token, env.secret_key, (err, data) => {
-            if (err) {
-              throw new AuthenticationError("Unauthticated Access!");
-            }
-            user = data;
-          });
-        }
+        if (!user) throw new AuthenticationError("Unauthenticated!");
         const users = await User.findAll({
           where: {
             email: {
@@ -34,7 +25,7 @@ module.exports = {
       }
     },
 
-    login: async (_, args) => {
+    login: async (parant, args) => {
       const { email, password } = args;
       const errors = {};
       try {
@@ -76,7 +67,7 @@ module.exports = {
   },
 
   Mutation: {
-    registerUser: async (_, args) => {
+    registerUser: async (parant, args) => {
       const { username, email, password, confirmPassword } = args;
 
       const errors = {};

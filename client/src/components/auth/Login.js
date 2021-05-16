@@ -1,8 +1,9 @@
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Card from "../UI/Card";
 import styles from "./auth.module.css";
+import { useAuth } from "../../contexts/AuthProvider";
 
 const LOGIN_USER = gql`
   query login($email: String!, $password: String!) {
@@ -16,11 +17,13 @@ const LOGIN_USER = gql`
 `;
 
 function Login(props) {
+  const { loginAction, user } = useAuth();
+
   const [errors, setErrors] = useState();
 
   const [login, { loading }] = useLazyQuery(LOGIN_USER, {
     onCompleted: (data) => {
-      localStorage.setItem("token", data.login.token);
+      loginAction(data.login);
       props.history.push("/");
     },
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
@@ -37,6 +40,10 @@ function Login(props) {
 
     login({ variables: { email: email, password: password } });
   };
+
+  if (user) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="container">

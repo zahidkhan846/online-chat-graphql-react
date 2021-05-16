@@ -50,6 +50,14 @@ nav {
   padding: 0 5rem;
 }
 
+nav h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 1rem;
+}
+
 nav ul {
   display: flex;
   list-style: none;

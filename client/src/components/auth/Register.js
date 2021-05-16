@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
 import Card from "../UI/Card";
 import styles from "./auth.module.css";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
+import { useAuth } from "../../contexts/AuthProvider";
 
 const REGISTER_USER = gql`
   mutation registerUser(
@@ -25,6 +26,8 @@ const REGISTER_USER = gql`
 `;
 
 function Register(props) {
+  const { user } = useAuth();
+
   const [errors, setErrors] = useState();
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
@@ -55,7 +58,9 @@ function Register(props) {
     });
   };
 
-  console.log(errors);
+  if (user) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="container">
@@ -109,7 +114,7 @@ function Register(props) {
               />
             </div>
             <div className="form-control">
-              <label htmlFor="password">
+              <label htmlFor="c-password">
                 {errors?.confirmPassword ? (
                   <span className={styles.labelError}>
                     {errors.confirmPassword}
@@ -120,7 +125,7 @@ function Register(props) {
               </label>
               <input
                 className={errors?.password && styles.inputError}
-                id="password"
+                id="c-password"
                 type="password"
                 ref={confirmPasswordRef}
               />
