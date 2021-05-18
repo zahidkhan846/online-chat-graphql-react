@@ -5,6 +5,9 @@ module.exports = {
   Message: {
     createdAt: (parant) => parant.createdAt.toISOString(),
   },
+  User: {
+    createdAt: (parant) => parant.createdAt.toISOString(),
+  },
   Query: {
     ...users.Query,
     ...messages.Query,

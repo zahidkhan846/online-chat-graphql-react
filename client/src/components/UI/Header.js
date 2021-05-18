@@ -1,13 +1,14 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import TextsmsIcon from "@material-ui/icons/Textsms";
 import { useAuth } from "../../contexts/AuthProvider";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
 function Header() {
   const { user, logoutAction } = useAuth();
 
   const activeClass = {
-    color: "black",
+    color: "green",
   };
 
   return (
@@ -28,7 +29,8 @@ function Header() {
           <li>
             {user ? (
               <button className="logout-btn" onClick={logoutAction}>
-                Logout
+                <span>Logout</span>
+                <PowerSettingsNewIcon />
               </button>
             ) : (
               <NavLink activeStyle={activeClass} to="/login">

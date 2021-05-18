@@ -1,4 +1,4 @@
-const { User } = require("../../models");
+const { User, Message } = require("../../models");
 const { UserInputError, AuthenticationError } = require("apollo-server");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -8,15 +8,24 @@ const { Op } = require("sequelize");
 module.exports = {
   Query: {
     getUsers: async (parant, args, { user }) => {
-      console.log(user);
       try {
         if (!user) throw new AuthenticationError("Unauthenticated!");
-        const users = await User.findAll({
-          where: {
-            email: {
-              [Op.ne]: user.email,
-            },
-          },
+        let users = await User.findAll({
+          // attributes: ["id", "username", "imageUrl", "createdAt", "email"],
+          where: { email: { [Op.ne]: user.email } },
+        });
+
+        const allUserMessages = await Message.findAll({
+          where: { [Op.or]: [{ from: user.email }, { to: user.email }] },
+          order: [["createdAt", "DESC"]],
+        });
+
+        users = users.map((user) => {
+          const latestMessage = allUserMessages.find(
+            (m) => m.from === user.email || m.to === user.email
+          );
+          user.latestMessage = latestMessage;
+          return user;
         });
         return users;
       } catch (error) {

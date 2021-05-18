@@ -4,13 +4,11 @@ import { Link, Redirect } from "react-router-dom";
 import Card from "../UI/Card";
 import styles from "./auth.module.css";
 import { useAuth } from "../../contexts/AuthProvider";
+import FooterForm from "../UI/FooterForm";
 
 const LOGIN_USER = gql`
   query login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      username
-      email
-      createdAt
       token
     }
   }
@@ -80,17 +78,7 @@ function Login(props) {
           </p>
         </div>
         <div className="mt-2">
-          <p className="off-white">
-            Copyright &copy;{" "}
-            <a
-              href="http://codewithzahid.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Code with zahid
-            </a>{" "}
-            {new Date().getFullYear()}
-          </p>
+          <FooterForm />
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import styles from "./auth.module.css";
 import { Link, Redirect } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
 import { useAuth } from "../../contexts/AuthProvider";
+import FooterForm from "../UI/FooterForm";
 
 const REGISTER_USER = gql`
   mutation registerUser(
@@ -148,17 +149,7 @@ function Register(props) {
           </p>
         </div>
         <div className="mt-2">
-          <p className="off-white">
-            Copyright &copy;{" "}
-            <a
-              href="http://codewithzahid.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Code with zahid
-            </a>{" "}
-            {new Date().getFullYear()}
-          </p>
+          <FooterForm />
         </div>
       </div>
     </div>
