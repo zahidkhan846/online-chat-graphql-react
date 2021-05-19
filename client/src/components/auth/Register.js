@@ -1,30 +1,11 @@
 import React, { useRef, useState } from "react";
 import Card from "../UI/Card";
-import styles from "./auth.module.css";
+import styles from "../../styles/auth.module.css";
 import { Link, Redirect } from "react-router-dom";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useAuth } from "../../contexts/AuthProvider";
 import FooterForm from "../UI/FooterForm";
-
-const REGISTER_USER = gql`
-  mutation registerUser(
-    $username: String!
-    $email: String!
-    $password: String!
-    $confirmPassword: String!
-  ) {
-    registerUser(
-      username: $username
-      email: $email
-      password: $password
-      confirmPassword: $confirmPassword
-    ) {
-      username
-      email
-      createdAt
-    }
-  }
-`;
+import { REGISTER_USER } from "../../utils/GraphqlQuery";
 
 function Register(props) {
   const { user } = useAuth();

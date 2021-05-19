@@ -16,7 +16,7 @@ function Message(props) {
         <p className={styles.content}>{props.message.content}</p>
         <div className={styles.info}>
           <p className={styles.time}>
-            {moment(props.message.createdAt).startOf("hour").fromNow()}
+            {moment(props.message.createdAt).startOf("minuts").fromNow()}
           </p>
           <p className={styles.username}>{me ? "Me" : from}</p>
         </div>

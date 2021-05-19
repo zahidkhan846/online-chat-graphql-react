@@ -6,6 +6,7 @@ import { useMessage } from "../contexts/MessageProvider";
 import Messages from "./Messages";
 import IconButtons from "./UI/IconButtons";
 import { GET_MESSAGES, GET_USERS } from "../utils/GraphqlQuery";
+import AddMessage from "./AddMessage";
 
 function DashBoard() {
   const { setMessages, selectedUser } = useMessage();
@@ -60,6 +61,7 @@ function DashBoard() {
         </div>
         <div className={styles.col2}>
           <Messages loading={messageLoading} error={messageError} />
+          {selectedUser && <AddMessage selectedUser={selectedUser} />}
         </div>
       </div>
     </div>

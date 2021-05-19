@@ -1,18 +1,11 @@
-import { gql, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import React, { useRef, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import Card from "../UI/Card";
-import styles from "./auth.module.css";
+import styles from "../../styles/auth.module.css";
 import { useAuth } from "../../contexts/AuthProvider";
 import FooterForm from "../UI/FooterForm";
-
-const LOGIN_USER = gql`
-  query login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-    }
-  }
-`;
+import { LOGIN_USER } from "../../utils/GraphqlQuery";
 
 function Login(props) {
   const { loginAction, user } = useAuth();
