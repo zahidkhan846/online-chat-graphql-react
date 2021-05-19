@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import ApolloProvider from "./contexts/ApolloProvider";
 import AuthProvider from "./contexts/AuthProvider";
 import MessageProvider from "./contexts/MessageProvider";
+import UserProvider from "./contexts/UserProvider";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -13,7 +14,9 @@ ReactDOM.render(
       <AuthProvider>
         <BrowserRouter>
           <MessageProvider>
-            <App />
+            <UserProvider>
+              <App />
+            </UserProvider>
           </MessageProvider>
         </BrowserRouter>
       </AuthProvider>

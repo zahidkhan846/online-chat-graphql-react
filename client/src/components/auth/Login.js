@@ -74,7 +74,7 @@ function Login(props) {
         <div className="mt-2">
           <p>
             Don't have an account, click here to{" "}
-            <Link to="/register">Register</Link>.
+            <Link to="/register">Register</Link>
           </p>
         </div>
         <div className="mt-2">

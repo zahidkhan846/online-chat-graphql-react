@@ -26,7 +26,6 @@ module.exports = {
 
         return allMessages;
       } catch (error) {
-        console.log(error);
         throw error;
       }
     },
@@ -55,7 +54,6 @@ module.exports = {
 
         return newMessage;
       } catch (error) {
-        console.log(error);
         throw error;
       }
     },

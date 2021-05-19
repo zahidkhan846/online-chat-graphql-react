@@ -1,34 +1,34 @@
-import { useQuery, gql } from "@apollo/client";
-import React from "react";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/dashboard.module.css";
 import Chat from "./Chat";
 import { useMessage } from "../contexts/MessageProvider";
-import Messages from "./Message";
+import Messages from "./Messages";
 import IconButtons from "./UI/IconButtons";
-
-const GET_USERS = gql`
-  query allUsers {
-    getUsers {
-      id
-      username
-      email
-      createdAt
-      imageUrl
-      latestMessage {
-        uuid
-        content
-        from
-        to
-        createdAt
-      }
-    }
-  }
-`;
+import { GET_MESSAGES, GET_USERS } from "../utils/GraphqlQuery";
 
 function DashBoard() {
-  const { loading, data, error } = useQuery(GET_USERS);
+  const { setMessages, selectedUser } = useMessage();
 
-  const { messages } = useMessage();
+  const [messageError, setMessageError] = useState();
+
+  const [getMessages, { loading: messageLoading }] = useLazyQuery(
+    GET_MESSAGES,
+    {
+      onCompleted: (data) => {
+        setMessages(data.getMessages);
+      },
+      onError: (err) => setMessageError(err),
+    }
+  );
+
+  useEffect(() => {
+    if (selectedUser) {
+      getMessages({ variables: { from: selectedUser } });
+    }
+  }, [selectedUser, getMessages]);
+
+  const { loading, data, error } = useQuery(GET_USERS);
 
   let users;
 
@@ -49,15 +49,17 @@ function DashBoard() {
       <div className={styles.gridContainer}>
         <div className={styles.col1}>
           <div className={styles.headerLeft}>
-            <h2>Chats</h2>
-            <IconButtons />
+            <h2 className={styles.heading}>Chats</h2>
+            <div className={styles.headerIcons}>
+              <IconButtons />
+            </div>
           </div>
           <ul>
             {data && users.map((user) => <Chat key={user.id} user={user} />)}
           </ul>
         </div>
         <div className={styles.col2}>
-          <Messages messages={messages} />
+          <Messages loading={messageLoading} error={messageError} />
         </div>
       </div>
     </div>

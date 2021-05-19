@@ -59,3 +59,13 @@
 .chatList h3 {
   text-transform: capitalize;
 }
+
+@media (max-width: 768px) {
+  .chatInfo {
+    display: none;
+  }
+
+  .image {
+    flex: 1;
+  }
+}

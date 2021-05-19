@@ -7,6 +7,18 @@ const { Op } = require("sequelize");
 
 module.exports = {
   Query: {
+    getUser: async (parant, args, { user }) => {
+      try {
+        if (!user) throw new AuthenticationError("Unauthenticated!");
+        let loggedInUser = await User.findOne({
+          where: { email: { [Op.eq]: user.email } },
+        });
+        return loggedInUser;
+      } catch (err) {
+        throw err;
+      }
+    },
+
     getUsers: async (parant, args, { user }) => {
       try {
         if (!user) throw new AuthenticationError("Unauthenticated!");

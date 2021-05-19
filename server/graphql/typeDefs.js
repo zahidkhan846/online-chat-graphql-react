@@ -23,6 +23,7 @@ module.exports = gql`
     getUsers: [User]!
     login(email: String!, password: String!): User!
     getMessages(from: String!): [Message]!
+    getUser: User!
   }
 
   type Mutation {

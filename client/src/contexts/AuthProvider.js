@@ -37,6 +37,7 @@ const reducer = (state, action) => {
       };
     case actionTypes.LOGOUT:
       localStorage.removeItem("token");
+
       return initialState;
     default:
       return state;

@@ -35,3 +35,25 @@
   display: flex;
   gap: 0.5rem;
 }
+
+@media (max-width: 768px) {
+  .headerIcons {
+    display: none;
+  }
+
+  .headerLeft {
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+
+  .heading {
+    text-align: center;
+    text-transform: uppercase;
+    color: #660779;
+  }
+
+  .dashboard {
+    height: 80vh;
+  }
+}

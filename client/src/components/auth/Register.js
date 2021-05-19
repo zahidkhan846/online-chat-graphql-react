@@ -145,7 +145,7 @@ function Register(props) {
         <div className="mt-2">
           <p>
             Already have an account, click here to{" "}
-            <Link to="/login">Login</Link>.
+            <Link to="/login">Login</Link>
           </p>
         </div>
         <div className="mt-2">
