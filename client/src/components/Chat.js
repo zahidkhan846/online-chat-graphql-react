@@ -4,13 +4,12 @@ import classNames from "classnames";
 import { useMessage } from "../contexts/MessageProvider";
 
 function Chat({ user }) {
-  const { setSelectedUser, selectedUser, setFrom } = useMessage();
+  const { setSelectedUser, selectedUser } = useMessage();
 
-  const currentChat = selectedUser === user.email;
+  const currentChat = selectedUser?.email === user.email;
 
   const handleChatSelect = () => {
-    setSelectedUser(user.email);
-    setFrom(user.username);
+    setSelectedUser(user);
   };
 
   return (

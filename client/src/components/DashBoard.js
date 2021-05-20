@@ -1,67 +1,41 @@
-import { useQuery, useLazyQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
+import React from "react";
 import styles from "../styles/dashboard.module.css";
 import Chat from "./Chat";
 import { useMessage } from "../contexts/MessageProvider";
 import Messages from "./Messages";
-import IconButtons from "./UI/IconButtons";
-import { GET_MESSAGES, GET_USERS } from "../utils/GraphqlQuery";
+import { GET_USERS } from "../utils/GraphqlQuery";
 import AddMessage from "./AddMessage";
+import ChatHeader from "./UI/ChatHeader";
 
 function DashBoard() {
-  const { setMessages, selectedUser } = useMessage();
+  const { setUsers, users } = useMessage();
 
-  const [messageError, setMessageError] = useState();
+  const { loading } = useQuery(GET_USERS, {
+    onCompleted: (data) => setUsers(data.getUsers),
+    onError: (err) => console.log(err),
+  });
 
-  const [getMessages, { loading: messageLoading }] = useLazyQuery(
-    GET_MESSAGES,
-    {
-      onCompleted: (data) => {
-        setMessages(data.getMessages);
-      },
-      onError: (err) => setMessageError(err),
-    }
-  );
+  let usersMarkup;
 
-  useEffect(() => {
-    if (selectedUser) {
-      getMessages({ variables: { from: selectedUser } });
-    }
-  }, [selectedUser, getMessages]);
-
-  const { loading, data, error } = useQuery(GET_USERS);
-
-  let users;
-
-  if (error) {
-    console.error(error);
-  }
-
-  if (!data || loading) {
-    users = <p>Loading...</p>;
-  } else if (data.getUsers.length === 0) {
-    users = <h2>No users foumd.</h2>;
-  } else if (data.getUsers.length > 0) {
-    users = data.getUsers;
+  if (!users || loading) {
+    usersMarkup = <p>Loading...</p>;
+  } else if (users.length === 0) {
+    usersMarkup = <h2>No usersMarkup foumd.</h2>;
+  } else if (users.length > 0) {
+    usersMarkup = users.map((user) => <Chat key={user.id} user={user} />);
   }
 
   return (
     <div className={styles.dashboard}>
       <div className={styles.gridContainer}>
         <div className={styles.col1}>
-          <div className={styles.headerLeft}>
-            <h2 className={styles.heading}>Chats</h2>
-            <div className={styles.headerIcons}>
-              <IconButtons />
-            </div>
-          </div>
-          <ul>
-            {data && users.map((user) => <Chat key={user.id} user={user} />)}
-          </ul>
+          <ChatHeader />
+          <ul>{usersMarkup}</ul>
         </div>
         <div className={styles.col2}>
-          <Messages loading={messageLoading} error={messageError} />
-          {selectedUser && <AddMessage selectedUser={selectedUser} />}
+          <Messages />
+          <AddMessage />
         </div>
       </div>
     </div>

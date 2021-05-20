@@ -44,11 +44,7 @@ const reducer = (state, action) => {
   }
 };
 
-const AuthContext = createContext({
-  user: null,
-  loginAction: (userData) => {},
-  logoutAction: () => {},
-});
+const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 

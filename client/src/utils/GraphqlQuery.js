@@ -42,7 +42,7 @@ export const GET_USER = gql`
   }
 `;
 
-export const ADD_MESSAGE = gql`
+export const SEND_MESSAGE = gql`
   mutation sendMessage($to: String!, $content: String!) {
     sendMessage(to: $to, content: $content) {
       uuid

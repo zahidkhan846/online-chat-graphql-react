@@ -1,14 +1,12 @@
 import React from "react";
-import { useMessage } from "../contexts/MessageProvider";
-import { useUser } from "../contexts/UserProvider";
 import styles from "../styles/message.module.css";
 import moment from "moment";
+import { useAuth } from "../contexts/AuthProvider";
 
 function Message(props) {
-  const { currentUser } = useUser();
-  const { from } = useMessage();
+  const { user } = useAuth();
 
-  const me = props.message.from === currentUser.email;
+  const me = props.message.from === user.email;
 
   return (
     <li className={styles.li}>
@@ -18,7 +16,7 @@ function Message(props) {
           <p className={styles.time}>
             {moment(props.message.createdAt).startOf("minuts").fromNow()}
           </p>
-          <p className={styles.username}>{me ? "Me" : from}</p>
+          <p className={styles.username}>{me ? "Me" : props.createdBy}</p>
         </div>
       </div>
     </li>

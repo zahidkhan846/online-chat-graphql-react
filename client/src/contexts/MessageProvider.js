@@ -1,70 +1,115 @@
 import React, { createContext, useContext, useReducer, useState } from "react";
 
-const initialState = {
-  messages: null,
-};
+const AuthContext = createContext();
+export const useMessage = () => useContext(AuthContext);
 
 const actionTypes = {
-  SET_MESSAGES: "SET_MESSAGES",
-  ADD_MESSAGES: "ADD_MESSAGES",
+  SET_USERS: "SET_USERS",
+  SELECTED_USER: "SELECTED_USER",
+  SET_USER_MESSAGES: "SET_USER_MESSAGES",
+  ADD_NEW_USER_MESSAGE: "ADD_NEW_USER_MESSAGE",
 };
 
-const AuthContext = createContext({
-  messages: null,
+const initialState = {
+  users: null,
   selectedUser: null,
-  setMessages: () => {},
-  setSelectedUser: () => {},
-  addMessage: () => {},
-});
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case actionTypes.SET_MESSAGES:
+    case actionTypes.SET_USERS:
       return {
         ...state,
-        messages: action.payload,
+        users: action.payload,
       };
 
-    case actionTypes.ADD_MESSAGES:
+    case actionTypes.SELECTED_USER:
       return {
         ...state,
-        messages: [...state.messages, action.payload],
+        selectedUser: action.payload,
       };
+
+    case actionTypes.SET_USER_MESSAGES:
+      const { email, messages } = action.payload;
+
+      let newSelectedUser = { ...state.selectedUser };
+
+      if (email === newSelectedUser.email) {
+        newSelectedUser = { ...newSelectedUser, messages };
+      }
+
+      return {
+        ...state,
+        selectedUser: newSelectedUser,
+      };
+
+    case actionTypes.ADD_NEW_USER_MESSAGE:
+      let updatedUserMessage = { ...state.selectedUser };
+
+      if (action.payload.email === updatedUserMessage.email) {
+        updatedUserMessage = {
+          ...updatedUserMessage,
+          messages: [action.payload.message, ...updatedUserMessage.messages],
+        };
+      }
+      return {
+        ...state,
+        selectedUser: updatedUserMessage,
+      };
+
     default:
       return state;
   }
 };
 
-export const useMessage = () => useContext(AuthContext);
-
 function MessageProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const [selectedUser, setSelectedUser] = useState(null);
   const [from, setFrom] = useState(null);
 
-  const setMessages = (arg) => {
+  const setUsers = (users) => {
     dispatch({
-      type: actionTypes.SET_MESSAGES,
-      payload: arg,
+      type: actionTypes.SET_USERS,
+      payload: users,
     });
   };
 
-  const addMessage = (arg) => {
+  const setSelectedUser = (currentUser) => {
     dispatch({
-      type: actionTypes.ADD_MESSAGES,
-      payload: arg,
+      type: actionTypes.SELECTED_USER,
+      payload: currentUser,
+    });
+  };
+
+  const setUserMessages = (user, messages) => {
+    dispatch({
+      type: actionTypes.SET_USER_MESSAGES,
+      payload: {
+        email: user,
+        messages: messages,
+      },
+    });
+  };
+
+  const addNewUserMessage = (user, message) => {
+    dispatch({
+      type: actionTypes.ADD_NEW_USER_MESSAGE,
+      payload: {
+        email: user,
+        message: message,
+      },
     });
   };
 
   const value = {
-    messages: state.messages,
-    setMessages,
-    selectedUser,
     setSelectedUser,
     from,
     setFrom,
-    addMessage,
+    setUsers,
+    users: state.users,
+    setUserMessages,
+    addNewUserMessage,
+    selectedUser: state.selectedUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

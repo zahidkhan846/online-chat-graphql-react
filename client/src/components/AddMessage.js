@@ -4,13 +4,14 @@ import SendIcon from "@material-ui/icons/Send";
 import styles from "../styles/addMessage.module.css";
 import { useMutation } from "@apollo/client";
 import { useMessage } from "../contexts/MessageProvider";
-import { ADD_MESSAGE } from "../utils/GraphqlQuery";
+import { SEND_MESSAGE } from "../utils/GraphqlQuery";
 
-function AddMessage({ selectedUser: to }) {
-  const { addMessage } = useMessage();
+function AddMessage() {
+  const { addNewUserMessage, selectedUser } = useMessage();
 
-  const [getMessages] = useMutation(ADD_MESSAGE, {
-    onCompleted: (data) => addMessage(data.sendMessage),
+  const [sendMessage] = useMutation(SEND_MESSAGE, {
+    onCompleted: (data) =>
+      addNewUserMessage(selectedUser.email, data.sendMessage),
     onError: (err) => console.log(err),
   });
 
@@ -18,15 +19,11 @@ function AddMessage({ selectedUser: to }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!to) {
-      return;
-    }
 
-    if (content.trim === "") {
-      return;
-    }
+    if (!selectedUser) return;
+    if (content.trim() === "") return;
 
-    getMessages({ variables: { to, content } });
+    sendMessage({ variables: { to: selectedUser.email, content } });
     setContent("");
   };
 

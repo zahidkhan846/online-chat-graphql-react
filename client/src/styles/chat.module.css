@@ -1,6 +1,5 @@
 .chatList {
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -50,10 +49,6 @@
 .chatInfo h3 {
   color: purple;
   font-weight: 500;
-}
-
-.chatList:last-child {
-  border-bottom: none;
 }
 
 .chatList h3 {
